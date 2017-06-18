@@ -11,5 +11,10 @@ namespace ShoppingCart
         {
             return 100*amount;
         }
+
+        public int GetPriceForPotterOneTwo(int amount1, int amount2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
