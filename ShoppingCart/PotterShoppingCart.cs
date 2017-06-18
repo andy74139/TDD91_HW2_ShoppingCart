@@ -19,5 +19,10 @@ namespace ShoppingCart
 
             return ((int) (100*2*0.95m))*seriesAmount + 100*oneBookAmount;
         }
+
+        public int GetPriceForPotters(IEnumerable<int> amounts)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
