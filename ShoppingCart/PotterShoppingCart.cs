@@ -20,9 +20,19 @@ namespace ShoppingCart
             return ((int) (100*2*0.95m))*seriesAmount + 100*oneBookAmount;
         }
 
-        public int GetPriceForPotters(IEnumerable<int> amounts)
+        public int GetPriceForPotters(IEnumerable<int> bookAmounts)
         {
-            throw new NotImplementedException();
+            if(bookAmounts.Count() != 3)
+                throw new ArgumentException("Length of bookAmounts must be 3");
+
+            var sortedAmounts = bookAmounts.ToArray();
+            Array.Sort(sortedAmounts);
+
+            var threeSeriesPrice = sortedAmounts[0]*((int) (100*3*0.9m));
+            var twoSeriesPrice = (sortedAmounts[1] - sortedAmounts[0])*((int) (100*2*0.95m));
+            var oneBookPrice = (sortedAmounts[2] - sortedAmounts[1])*100;
+
+            return threeSeriesPrice + twoSeriesPrice + oneBookPrice;
         }
     }
 }
