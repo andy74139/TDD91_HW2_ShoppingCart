@@ -9,7 +9,7 @@ namespace ShoppingCart
     {
         public int GetPriceForPotterI(int amount)
         {
-            throw new NotImplementedException();
+            return 100*amount;
         }
     }
 }
