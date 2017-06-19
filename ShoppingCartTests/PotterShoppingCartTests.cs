@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using ShoppingCart;
 
 namespace ShoppingCart.Tests
 {
@@ -19,11 +18,10 @@ namespace ShoppingCart.Tests
         {
             var target = new PotterShoppingCart();
             return target.GetPriceForPotterOneTwo(amount1, amount2);
-
-            
         }
 
-        [TestCase(new []{1,1,1}, ExpectedResult = 270)]
+        [TestCase(new[] {1, 1, 1}, ExpectedResult = 270)]
+        [TestCase(new[] {1, 1, 1, 1}, ExpectedResult = 320)]
         public int GetPriceForPottersTest(IEnumerable<int> bookAmounts)
         {
             var target = new PotterShoppingCart();
