@@ -20,7 +20,7 @@ namespace ShoppingCart.Tests
             return target.GetPriceForPotterOneTwo(amount1, amount2);
         }
 
-        [TestCase(new[] {1, 1, 1}, ExpectedResult = 270)]
+        [TestCase(new[] {1, 1, 1, 0}, ExpectedResult = 270)]
         [TestCase(new[] {1, 1, 1, 1}, ExpectedResult = 320)]
         public int GetPriceForPottersTest(IEnumerable<int> bookAmounts)
         {

@@ -22,17 +22,18 @@ namespace ShoppingCart
 
         public int GetPriceForPotters(IEnumerable<int> bookAmounts)
         {
-            if(bookAmounts.Count() != 3)
-                throw new ArgumentException("Length of bookAmounts must be 3");
+            if(bookAmounts.Count() != 4)
+                throw new ArgumentException("Length of bookAmounts must be 4");
 
             var sortedAmounts = bookAmounts.ToArray();
             Array.Sort(sortedAmounts);
 
-            var threeSeriesPrice = sortedAmounts[0]*((int) (100*3*0.9m));
-            var twoSeriesPrice = (sortedAmounts[1] - sortedAmounts[0])*((int) (100*2*0.95m));
-            var oneBookPrice = (sortedAmounts[2] - sortedAmounts[1])*100;
+            var fourSeriesPrice = sortedAmounts[0]*((int) (100*4*0.8m));
+            var threeSeriesPrice = (sortedAmounts[1] - sortedAmounts[0])*((int) (100*3*0.9m));
+            var twoSeriesPrice = (sortedAmounts[2] - sortedAmounts[1])*((int) (100*2*0.95m));
+            var oneBookPrice = (sortedAmounts[3] - sortedAmounts[2])*100;
 
-            return threeSeriesPrice + twoSeriesPrice + oneBookPrice;
+            return fourSeriesPrice + threeSeriesPrice + twoSeriesPrice + oneBookPrice;
         }
     }
 }
