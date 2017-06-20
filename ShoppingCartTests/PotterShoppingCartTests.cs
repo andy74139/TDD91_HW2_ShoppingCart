@@ -22,6 +22,7 @@ namespace ShoppingCart.Tests
 
         [TestCase(new[] {1, 1, 1, 0}, ExpectedResult = 270)]
         [TestCase(new[] {1, 1, 1, 1}, ExpectedResult = 320)]
+        [TestCase(new[] {1, 1, 1, 1, 1}, ExpectedResult = 375)]
         public int GetPriceForPottersTest(IEnumerable<int> bookAmounts)
         {
             var target = new PotterShoppingCart();
