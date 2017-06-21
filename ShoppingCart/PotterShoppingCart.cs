@@ -1,27 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ShoppingCart
 {
     public class PotterShoppingCart
     {
-        public int GetPriceForPotters(IEnumerable<int> bookAmounts)
+        private static readonly Dictionary<int, decimal> _Discount =
+            new Dictionary<int, decimal>
+            {
+                {5, 0.75m},
+                {4, 0.8m},
+                {3, 0.9m},
+                {2, 0.95m},
+                {1, 1m}
+            };
+
+        private Dictionary<IPotterBook, int> _Books;
+
+        public PotterShoppingCart()
         {
-            if(bookAmounts.Count() != 5)
-                throw new ArgumentException("Length of bookAmounts must be 5");
+            ResetCart();
+        }
 
-            var sortedAmounts = bookAmounts.ToArray();
-            Array.Sort(sortedAmounts);
+        public void AddPotterBook(IPotterBook book, int amount)
+        {
+            if (book == null || amount <= 0)
+                throw new ArgumentException();
 
-            var fiveSeriesPrice = sortedAmounts[0]*((int) (100*5*0.75m));
-            var fourSeriesPrice = (sortedAmounts[1] - sortedAmounts[0])*((int) (100*4*0.8m));
-            var threeSeriesPrice = (sortedAmounts[2] - sortedAmounts[1])*((int) (100*3*0.9m));
-            var twoSeriesPrice = (sortedAmounts[3] - sortedAmounts[2])*((int) (100*2*0.95m));
-            var oneBookPrice = (sortedAmounts[4] - sortedAmounts[3])*100;
+            if (_Books.ContainsKey(book))
+                _Books[book] += amount;
+            else
+                _Books[book] = amount;
 
-            return fiveSeriesPrice + fourSeriesPrice + threeSeriesPrice + twoSeriesPrice + oneBookPrice;
+            if (_Books.Count > 5)
+                throw new ArgumentException();
+        }
+
+        public Dictionary<IPotterBook, int> GetCart()
+        {
+            return new Dictionary<IPotterBook, int>(_Books);
+        }
+
+        public void ResetCart()
+        {
+            _Books = new Dictionary<IPotterBook, int>();
+        }
+
+        public int Checkout()
+        {
+            var price = GetPriceInCart();
+            ResetCart();
+            return price;
+        }
+
+        public int GetPriceInCart()
+        {
+            var orderedBooks = _Books.OrderByDescending(b => b.Value);
+
+            var price = 0;
+            var lastCumulativeSeriesAmount = 0;
+            for (var booksInOneSeries = orderedBooks.Count(); booksInOneSeries > 0; booksInOneSeries--)
+            {
+                var cumulativeSeriesAmount = orderedBooks.ElementAt(booksInOneSeries - 1).Value;
+                var thisSeriesAmount = cumulativeSeriesAmount - lastCumulativeSeriesAmount;
+                price += GetThisSeriesPrice(orderedBooks, booksInOneSeries) * thisSeriesAmount;
+
+                lastCumulativeSeriesAmount = cumulativeSeriesAmount;
+            }
+            return price;
+        }
+
+        private static int GetThisSeriesPrice(IOrderedEnumerable<KeyValuePair<IPotterBook, int>> orderedBooks, int booksInOneSeries)
+        {
+            var totalPrice = orderedBooks.Skip(orderedBooks.Count() - booksInOneSeries).Select(b => b.Key.GetPrice()).Sum();
+            return (int) (totalPrice*_Discount[booksInOneSeries]);
         }
     }
 }
